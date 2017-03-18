@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Computer Science</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script type="text/javascript" src="d3/d3.v3.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="controller.js"></script>
+	<style type="text/css">
+			body{
+				background-image: url("https://www.clipartsgram.com/image/602263895-great-light-streaks-powerpoint-files-powerpoint-backgrounds.jpg");
+				background-size: 1300px 800px;
+
+			}
+	</style>
+</head>
+<body style="text-align: center">
+	<nav class="navbar navbar-inverse">
+  		<div class="container-fluid">
+   		 	<div class="navbar-header">
+     	 		<a class="navbar-brand" href="#">Fisk Courses Dependency Graph</a>
+    		</div>
+    		<div>
+    		<button class="btn btn-danger navbar-btn" style="" onclick="loadMath()">Mathematics</button>
+    		<button class="btn btn-danger navbar-btn">English</button>
+    		<button class="btn btn-danger navbar-btn">Physics</button>
+    		<button class="btn btn-danger navbar-btn">Psychology</button>
+    		<button class="btn btn-danger navbar-btn">Biology</button>
+    		<button class="btn btn-danger navbar-btn">Chemistry</button>
+    		<button class="btn btn-danger navbar-btn">Art</button>
+    		<button class="btn btn-danger navbar-btn" onclick="loadCS()">Computer Science</button>
+    		<button class="btn btn-danger navbar-btn">Business</button>
+    		<button class="btn btn-danger navbar-btn">Music</button>
+    		</div>
+  		</div>
+</nav>
+
+<div class="ui-widget">
+   <input id="search">
+    <button type="button" onclick="searchNode()">Find Course</button>
+</div>
+
+	<script type="text/javascript">
+	  
+
+	  //"http://wallpapercave.com/wp/1ckSwQ5.jpg"  
+	    var w = 750
+		var h = 750  
+
+		var dataset = {
+			nodes: [
+					{name:"Intro to Programming 1"},
+					{name:"Intro to Programming 2"},
+					{name: "Data Structures & Algorithms"},
+					{name: "Intro to Mobile Apps"},
+					{name: "Computer Architecture"},
+					{name: "Computer Networking"},
+					{name: "Database Management"},
+					{name: "Linear Algebra"},
+					{name: "Bio-Statistics"},
+			],
+			edges: [
+					{source: 0, target: 1},
+					{source: 1, target: 2},
+					{source: 1, target: 3},
+					{source: 1, target: 4},
+					{source: 2, target: 5},
+					{source: 2, target: 6},
+					{source: 2, target: 7},
+					{source: 3, target: 8},
+			]
+		}
+
+
+		console.log(dataset.nodes[0].name)
+
+		//how to initialize a force layout
+		var force = d3.layout.force()
+						.nodes(dataset.nodes)
+						.links(dataset.edges)
+						.size([w,h])
+						.linkDistance([100])
+						.charge([-500])
+						.start()
+
+	    var colors = d3.scale.category10()
+
+	    //create svg
+	    var svg = d3.select("body").append("svg")
+	   				.attr("height", h)
+	   				.attr("width", w)
+
+
+
+
+		svg.append("defs").selectAll("marker")
+    		.data(["suit", "licensing", "resolved"])
+  			.enter().append("marker")
+    		.attr("id", function(d) { return d; })
+    		.attr("viewBox", "0 -5 10 50")
+    		.attr("refX", 30)
+    		.attr("refY", 0)
+    		.attr("markerWidth", 20)
+    		.attr("markerHeight", 20)
+    		.attr("orient", "auto")
+  			.append("path")
+    		.attr("d", "M0,-5L10,0L0,5 L10,0 L0, -5")
+    		.style("stroke", "#4679BD")
+    		.style("opacity", "0.6");
+
+	   	//create edges as lines
+		var edges = svg.selectAll("line")
+						.data(dataset.edges)
+						.enter()
+						.append("line")
+						.style("stroke", "#FF5733")
+						.style("stroke-width", 2.5)
+						.style("marker-end",  "url(#suit)")  //
+
+		//create nodes as circles
+
+		var node = svg.selectAll(".node")
+		    .data(dataset.nodes)
+		    .enter().append("g")
+		    .attr("class", "node")
+		    .call(force.drag);
+		node.append("circle")
+		    .attr("r", 17)
+		    .style("fill", function (d, i) {
+		    return colors(i);
+		})
+		node.append("text")
+		      .attr("dx", 20)
+		      .attr("dy", ".35em")
+		      .text(function(d) { return d.name })
+		      .style("stroke", "black");
+
+		force.on("tick", function () {
+		    edges.attr("x1", function (d) {
+		        return d.source.x;
+		    })
+		        .attr("y1", function (d) {
+		        return d.source.y;
+		    })
+		        .attr("x2", function (d) {
+		        return d.target.x;
+		    })
+		        .attr("y2", function (d) {
+		        return d.target.y;
+		    });
+		    d3.selectAll("circle").attr("cx", function (d) {
+		        return d.x;
+		    })
+		        .attr("cy", function (d) {
+		        return d.y;
+		    });
+		    d3.selectAll("text").attr("x", function (d) {
+		        return d.x;
+		    })
+		        .attr("y", function (d) {
+		        return d.y;
+		    });
+		});
+
+
+
+	var optArray = [];
+	for (var i = 0; i < dataset.nodes.length - 1; i++) {
+	    optArray.push(dataset.nodes[i].name);
+	}
+	optArray = optArray.sort();
+	$(function () {
+	    $("#search").autocomplete({
+	        source: optArray
+	    });
+	});
+
+	function searchNode() {
+	    //find the node
+	    var selectedVal = document.getElementById('search').value;
+	    var node = svg.selectAll(".node");
+	    if (selectedVal == "none") {
+	        node.style("stroke", "white").style("stroke-width", "1");
+	    } else {
+	        var selected = node.filter(function (d, i) {
+	            return d.name != selectedVal;
+	        });
+	        selected.style("opacity", "0");
+	        var link = svg.selectAll(".link")
+	        link.style("opacity", "0");
+	        d3.selectAll(".node, .link").transition()
+	            .duration(5000)
+	            .style("opacity", 1);
+	    }
+	}		
+
+		
+	</script>
+	</div>
+</body>
+</html>
