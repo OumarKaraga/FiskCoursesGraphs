@@ -26,16 +26,16 @@
      	 		<a class="navbar-brand" href="#">Fisk Courses Dependency Graph</a>
     		</div>
     		<div>
-    		<button class="btn btn-danger navbar-btn" style="" onclick="loadMath()">Mathematics</button>
-    		<button class="btn btn-danger navbar-btn">English</button>
-    		<button class="btn btn-danger navbar-btn">Physics</button>
-    		<button class="btn btn-danger navbar-btn">Psychology</button>
-    		<button class="btn btn-danger navbar-btn">Biology</button>
-    		<button class="btn btn-danger navbar-btn">Chemistry</button>
-    		<button class="btn btn-danger navbar-btn">Art</button>
-    		<button class="btn btn-danger navbar-btn" onclick="loadCS()">Computer Science</button>
-    		<button class="btn btn-danger navbar-btn">Business</button>
-    		<button class="btn btn-danger navbar-btn">Music</button>
+    		<button class="btn btn-danger navbar-btn" id="math">Mathematics</button>
+    		<button class="btn btn-danger navbar-btn" id="english">English</button>
+    		<button class="btn btn-danger navbar-btn" id="physics">Physics</button>
+    		<button class="btn btn-danger navbar-btn" id="psychology">Psychology</button>
+    		<button class="btn btn-danger navbar-btn" id="biology">Biology</button>
+    		<button class="btn btn-danger navbar-btn" id="chemistry">Chemistry</button>
+    		<button class="btn btn-danger navbar-btn" id="art">Art</button>
+    		<button class="btn btn-danger navbar-btn" id="cs">Computer Science</button>
+    		<button class="btn btn-danger navbar-btn" id="business">Business</button>
+    		<button class="btn btn-danger navbar-btn" id="music">Music</button>
     		</div>
   		</div>
 </nav>
@@ -104,7 +104,7 @@
 
 
 
-
+        // add directions to links
 		svg.append("defs").selectAll("marker")
     		.data(["suit", "licensing", "resolved"])
   			.enter().append("marker")
